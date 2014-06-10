@@ -1,0 +1,88 @@
+Game Of Life
+------------------------------------------------
+Animates and plays Conway's game of life
+
+
+Installation
+------------------------------------------------
+Only necessary if you want to run tests:
+pip install -r requirements.txt
+
+
+Usage
+------------------------------------------------
+Usage:  game_of_life_runner.py [options].
+
+If "--filename" is not passed in, the user can type in the board they want to
+test. Boards should look like:
+
+0 0
+0 1
+
+where "0"s represent dead cells and "1"s represent live cells. Hit return twice
+when done drawing the board.
+
+By default uses `curses` to draw the output. If using a non unix like OS,
+please use "--animator print_all" for a less pleasant but working experience.
+Important caveat: a "_curses.error" will be raised if your screen resolution is
+too small for larger boards.
+
+Sample Calls:
+python game_of_life_runner.py --filename=boards/gosper_glider_gun.txt
+    --output-dead-cell-character=' ' <-- My favorite
+python game_of_life_runner.py --filename=boards/h.txt --output-live-cell-character=' '
+    --output-dead-cell-character='X' <-- Also really cool
+python game_of_life_runner.py
+python game_of_life_runner.py --filename=boards/blinker.txt --step-to-print=5
+python game_of_life_runner.py --filename=boards/beacon.txt --animator=print_all
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --animator ANIMATOR   How to animate the game of life. Acceptable ANIMATORS
+                        include: "curses", and "print_all". "curses" uses
+                        `curses`, a terminal control library for Unix-like
+                        systems to draw and refresh the screen. Hitting "q"
+                        will quit out of the process. "print_all" prints each
+                        iteration, one at a time, blank line separated.
+                        "print_all" creates an animator that runs indefinitely
+                        so this process will need to be explicitly killed via
+                        ctrl-c. The default ANIMATOR is "curses". This can not
+                        be used together with "--step-to-print
+  --filename FILENAME   If passed in takes a input file that describes the
+                        initial grid. Grids look like "0", "1" with spaces
+                        representing different columns and new lines
+                        representing different rows. Please look at
+                        "boards/blinker.txt" to see an example of a valid
+                        board.
+  --step-to-print STEP_TO_PRINT
+                        The step to print. The initial step is step 1. This
+                        can not be used together with "--animator".
+  --output-live-cell-character OUTPUT_LIVE_CELL_CHARACTER
+                        Character to represent a living cell during animation.
+                        Defaults to "1"
+  --output-dead-cell-character OUTPUT_DEAD_CELL_CHARACTER
+                        Character to represent a living cell during animation.
+                        Defaults to "0"
+
+
+Running Tests
+------------------------------------------------
+Run `nostests` if `nose` is installed via "pip install -r requirements.txt".
+
+
+Project Layout
+------------------------------------------------
+game_of_life_runner.py - runs a "Game of Life" simulation
+boards/ - test boards that can be passed in to game_of_life_runner.py's
+    "--filename" argument
+game_of_life/
+    __init__.py
+    animators.py - contains `Animator` objects responsible for animating boards in
+        various ways
+    board.py - contains the `Board` object that represents a Game Of Life board
+        and all the logic that handles stepping through game states
+    drawer.py - handles drawing a particular `Board` state
+    errors.py - contains various exceptions that can be raised during runtime
+    loader.py - contains the `Loader` responsible for parsing the board in
+        various ways
+tests/ - tests
